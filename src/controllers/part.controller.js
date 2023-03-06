@@ -22,10 +22,18 @@ async function create(req, res) {
 async function viewAll(req, res) {
   try {
     const partInstance = await partService.viewAll()
+    let partsSortedByManufacturer = partInstance.reduce((accumulatorParts, currentPart) => {
+      const key = currentPart["manufacturer_name"]
+      const currentParts = accumulatorParts[key] ?? []
+      return {
+        ...accumulatorParts,
+        [key]: [...currentParts, currentPart],
+      }
+    }, {})
     return res.status(200).json({
       status: 200,
       message: "Successfully parts retrieved",
-      data: partInstance,
+      data: partsSortedByManufacturer,
     })
   } catch (error) {
     return res.status(400).json({

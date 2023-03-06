@@ -17,7 +17,10 @@ function create(payload) {
 // Select all parts
 function viewAll() {
   return new Promise((resolve, reject) => {
-    const sql = "SELECT * from ct_parts"
+    const sql = `SELECT ct_parts.id,ct_parts.name AS name,ct_parts.price, ct_manufacturers.name AS manufacturer_name,ct_parts.created_at
+      FROM ct_parts 
+      INNER JOIN ct_manufacturers 
+      ON ct_parts.manufacturer_id=ct_manufacturers.id`
     db.query(sql, (error, results) => {
       if (error) reject(error)
       resolve(results)
